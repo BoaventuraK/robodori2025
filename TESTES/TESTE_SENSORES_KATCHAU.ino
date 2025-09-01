@@ -30,14 +30,14 @@ QTRSensors qtr;
 
 #define LED_BUILTIN 2
 
-const uint8_t SensorCount = 8;
+const uint8_t SensorCount = 5;
 uint16_t sensorValues[SensorCount];
 
 void setup()
 {
   // configure the sensors
   qtr.setTypeRC();
-  qtr.setSensorPins((const uint8_t[]){22, 2, 4, 17, 18, 19, 15, 23}, SensorCount);
+  qtr.setSensorPins((const uint8_t[]){22, 4, 17, 18, 23}, SensorCount);
   qtr.setEmitterPin(16);
 
   delay(500);
@@ -47,7 +47,7 @@ void setup()
   // 2.5 ms RC read timeout (default) * 10 reads per calibrate() call
   // = ~25 ms per calibrate() call.
   // Call calibrate() 400 times to make calibration take about 10 seconds.
-  for (uint16_t i = 0; i < 1000; i++)
+  for (uint16_t i = 0; i < 400; i++)
   {
     qtr.calibrate();
   }
