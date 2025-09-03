@@ -11,6 +11,8 @@
 
 #define LED_BUILTIN 2
 
+#define lum 500
+
 //Configuraçoes dos motores
 const int offsetA = 1;
 const int offsetB = 1;
@@ -18,19 +20,19 @@ const int offsetB = 1;
 Motor motor1 = Motor(AIN1, AIN2, PWMA, offsetA, STBY);
 Motor motor2 = Motor(BIN1, BIN2, PWMB, offsetB, STBY);
 
-int speedRight = 200;
-int speedLeft = 200*0.80;
+int speedRight = 180;
+int speedLeft = speedRight*0.80;
 
 //Sensores var config
 QTRSensors qtr;
 
-const uint8_t SensorCount = 8;
+const uint8_t SensorCount = 5;
 uint16_t sensorValues[SensorCount];
 
 void setup() {
   // configure the sensors
   qtr.setTypeRC();
-  qtr.setSensorPins((const uint8_t[]){22, 2, 4, 17, 18, 19, 15, 23}, SensorCount);
+  qtr.setSensorPins((const uint8_t[]){22, 4, 17, 18, 23}, SensorCount);
   qtr.setEmitterPin(16);
 
   delay(500);
@@ -40,7 +42,7 @@ void setup() {
   // 2.5 ms RC read timeout (default) * 10 reads per calibrate() call
   // = ~25 ms per calibrate() call.
   // Call calibrate() 400 times to make calibration take about 10 seconds.
-  for (uint16_t i = 0; i < 1000; i++)
+  for (uint16_t i = 0; i < 400; i++)
   {
     qtr.calibrate();
   }
@@ -72,24 +74,33 @@ void forward(){
 }
 
 void left(){
-    motor1.drive(speedRight,1000);
+    motor1.drive(speedRight - 30,1000);
     motor2.drive(0,1000);
 }
 
 void right(){
     motor1.drive(0,1000);
-    motor2.drive(speedLeft,1000);
+    motor2.drive(speedLeft - 30,1000);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   uint16_t position = qtr.readLineWhite(sensorValues);
+
+   for (uint8_t i = 0; i < SensorCount; i++)
+  {
+    Serial.print(sensorValues[i]);
+    Serial.print('\t');
+  }
+  Serial.println(position);
   
-  if(sensorValues[3] > 500 && sensorValues[4] > 500 && sensorValues[5] > 500){
+  if(sensorValues[4] < lum){
     forward();
-  }else if(sensorValues[3] < 500 && (sensorValues[4] > 500 || sensorValues[5] > 500)){
+  }
+  if(sensorValues[6] < lum || sensorValues[5] < lum && sensorValues[4] > lum){
     left();
-  }else if(sensorValues[4] < 500 && (sensorValues[3] > 500 || sensorValues[2] > 500)){
+  }
+  if(sensorValues[2] < lum || sensorValues[3] < lum && sensorValues[4] > lum){
     right();
   }
 

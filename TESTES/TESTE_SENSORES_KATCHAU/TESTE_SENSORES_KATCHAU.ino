@@ -30,14 +30,15 @@ QTRSensors qtr;
 
 #define LED_BUILTIN 2
 
-const uint8_t SensorCount = 5;
+const uint8_t SensorCount = 8;
 uint16_t sensorValues[SensorCount];
 
 void setup()
 {
   // configure the sensors
   qtr.setTypeRC();
-  qtr.setSensorPins((const uint8_t[]){22, 4, 17, 18, 23}, SensorCount);
+  //qtr.setSensorPins((const uint8_t[]){22, 2, 4, 17, 18, 19, 15, 23}, SensorCount);
+  qtr.setSensorPins((const uint8_t[]){21, 22, 4, 17, 18, 15, 19, 23}, SensorCount);
   qtr.setEmitterPin(16);
 
   delay(500);
