@@ -150,22 +150,32 @@ void loop()
         }
     }
 
+    if(etapa == 1)
+    {
+        girar_direita();
+        if (agora > acaoAte) {
+            etapa = 3;
+            acaoAte = agora + 300; // ré
+        }
+        return;
+    }
+
     if (etapa == 2)
     {
         girar_esquerda();
         if (agora > acaoAte) {
             etapa = 3; 
             acaoAte = agora + 300; // ré
-            }
-            return;
+        }
+        return;
     }
         
     if (etapa == 3) 
     { // ré
         ir_tras();
         if (agora > acaoAte) {
-        etapa = 4;
-        acaoAte = agora + 400; // girar depois da ré
+            etapa = 4;
+            acaoAte = agora + 400; // girar depois da ré
         }
         return;
     }
@@ -174,7 +184,7 @@ void loop()
     { // gira para procurar de novo
         girar_direita();  // poderia alternar para esquerda também
         if (agora > acaoAte) {
-        etapa = 0; // terminou sequência, volta ao normal
+            etapa = 0; // terminou sequência, volta ao normal
         }
         return;
     }
